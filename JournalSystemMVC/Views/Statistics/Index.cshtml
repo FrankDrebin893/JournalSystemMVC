@@ -1,0 +1,292 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+
+<style>
+    text {
+        font: 12px sans-serif;
+    }
+
+    svg {
+        display: block;
+    }
+
+    html, body, #chart1, #chart2, svg {
+        margin: 0px;
+        padding: 0px;
+        height: 250px;
+        width: 100%;
+    }
+</style>
+
+
+
+<div id="chart1">
+    <svg></svg>
+</div>
+
+
+<div style="position:absolute; top: 0; left: 0;">
+    <button onclick="randomizeFillOpacity();">Randomize fill opacity</button>
+    <button onclick="expandLegend();">Expand/Contract Legend</button>
+    <script>
+        var expandLegend = function() {
+            var exp = chart.legend.expanded();
+            chart.legend.expanded(!exp);
+            chart.update();
+        }
+    </script>
+</div>
+<div id="chart2"></div>
+
+
+<div>@ViewBag.json</div>
+<div id="testData"></div>
+
+@section scripts {
+
+    <script type="text/javascript">
+        historicalBarChart = [
+            {
+                key: "Cumulative Return",
+                values: [
+                    {
+                        "label": "Peter Svidler",
+                        "value": 4.5
+                    },
+                    {
+                        "label": "Magnus Carlsen",
+                        "value": 2.1
+                    },
+                    {
+                        "label": "Garry Kasparov",
+                        "value": 3.5
+                    },
+                    {
+                        "label": "Sergey Karjakin",
+                        "value": 4
+                    },
+                    {
+                        "label": "Veselin Topalov",
+                        "value": 2.6
+                    },
+                    {
+                        "label": "Mikhail Tal",
+                        "value": 4
+                    }
+                ]
+            }
+        ];
+        nv.addGraph(function() {
+            var chart = nv.models.discreteBarChart()
+                .x(function(d) { return d.label })
+                .y(function(d) { return d.value })
+                .staggerLabels(true)
+                //.staggerLabels(historicalBarChart[0].values.length > 8)
+                .showValues(true)
+                .duration(250);
+            d3.select('#chart1 svg')
+                .datum(historicalBarChart)
+                .call(chart);
+            nv.utils.windowResize(chart.update);
+            return chart;
+        });
+    </script>
+
+    <script>
+        function getQuestionData(userId, callback) {
+           $.ajax({
+                type: 'GET',
+                url: 'GetQuestionData',
+                data: { id: 1003 },
+                dataType: 'application/json',
+                success: callback,
+                error: function() {
+                    alert('Error during AJAX request');
+                }
+            });
+        }
+
+        function randomDate(start, i) {
+            return new Date(start.getTime() + i);
+        }
+
+        // Wrapping in nv.addGraph allows for '0 timeout render', stores rendered charts in nv.graphs, and may do more in the future... it's NOT required
+        var chart;
+        var data;
+        var randomizeFillOpacity = function() {
+            var rand = Math.random(0, 1);
+            for (var i = 0; i < 100; i++) { // modify sine amplitude
+                data[4].values[i].y = Math.sin(i / (5 + rand)) * .4 * rand - .25;
+            }
+            data[4].fillOpacity = rand;
+            chart.update();
+        };
+
+        nv.addGraph(function() {
+            chart = nv.models.lineChart()
+                .options({
+                    duration: 300,
+                    useInteractiveGuideline: true
+                });
+            // chart sub-models (ie. xAxis, yAxis, etc) when accessed directly, return themselves, not the parent chart, so need to chain separately
+            chart.xAxis
+                .axisLabel("Date (s)")
+                .tickFormat(function(d) { return d3.time.format('%b %d %Y')(new Date(d)); })
+                .staggerLabels(true);
+            chart.yAxis
+                .axisLabel('Score (v)')
+                .tickFormat(function(d) {
+                    if (d == null) {
+                        return 'N/A';
+                    }
+                    return d3.format(',.2f')(d);
+                });
+            data = residentData();
+            d3.select('#chart2').append('svg')
+                .datum(data)
+                .call(chart);
+            nv.utils.windowResize(chart.update);
+            debugger;
+            return chart;
+        });
+
+        function residentData() {
+          //  getQuestionData(1003, function (data) {
+            var scores = [];
+            //var answerList = $.getJSON("Statistics/GetQuestionData");
+            getQuestionData(1003, function (data) {
+                console.log("Hello from callback");
+                var answerList = data;
+            });
+            
+            console.log("Hello");
+
+            //      for (var i = 0; i <50; i++) {
+            //          scores.push({ x: randomDate(new Date(2012, 0, 1), i*86400000), y: Math.random() * (5 - 1) + 1 });
+            //      }
+
+            //for (var i = 0; i < answerList.Answers.length; i++) {
+            for (var i = 0; i < 50; i++) {
+                //var answer = answerList.Answers[i];
+                //var dateValue = answerList[i].Answers.y;
+                //var formattedDate = new Date(parseInt(dateValue.replace("/Date(", "").replace(")/", ""), 10));
+                //var score = answerlist.Answers[i].[x];
+                scores.push({ x: 2, y: new Date(2012, 0, 1) });
+            }
+
+            return [
+                {
+                    area: true,
+                    values: scores,
+                    key: "Question 1 scores",
+                    color: "#ff7f0e",
+                    strokeWidth: 5
+                }
+            ];
+
+           // });
+        }
+    </script>
+
+    <script>
+/*
+        function randomDate(start, i) {
+            return new Date(start.getTime() + i);
+        }
+
+        // Wrapping in nv.addGraph allows for '0 timeout render', stores rendered charts in nv.graphs, and may do more in the future... it's NOT required
+        var chart;
+        var data;
+        var randomizeFillOpacity = function() {
+            var rand = Math.random(0,1);
+            for (var i = 0; i < 100; i++) { // modify sine amplitude
+                data[4].values[i].y = Math.sin(i/(5 + rand)) * .4 * rand - .25;
+            }
+            data[4].fillOpacity = rand;
+            chart.update();
+        };
+
+        nv.addGraph(function() {
+            chart = nv.models.lineChart()
+                    .options({
+                        duration: 300,
+                        useInteractiveGuideline: true
+                    })
+                ;
+            // chart sub-models (ie. xAxis, yAxis, etc) when accessed directly, return themselves, not the parent chart, so need to chain separately
+            chart.xAxis
+                    .axisLabel("Date (s)")
+                    .tickFormat(function (d) { return d3.time.format('%b %d %Y')(new Date(d)); })
+                    .staggerLabels(true)
+                ;
+            chart.yAxis
+                    .axisLabel('Score (v)')
+                    .tickFormat(function(d) {
+                        if (d == null) {
+                            return 'N/A';
+                        }
+                        return d3.format(',.2f')(d);
+                    })
+                ;
+            data = residentData();
+            d3.select('#chart2').append('svg')
+                .datum(data)
+                .call(chart);
+            nv.utils.windowResize(chart.update);
+            return chart;
+        });
+
+        function residentData() {
+            var scores = [];
+            //var answerList = $.getJSON("Statistics/GetQuestionData");
+            
+            var answerList;
+            console.log("Hello");
+
+            $.ajax({
+                type: 'GET',
+                data: 1,
+                url: 'GetQuestionData',
+                dataType: 'application/json',
+                success: function(response) {
+                    answerList = response;
+                    console.log("Success!");
+                },
+                error: function(response) {
+                    alert('Error during AJAX request');
+                }
+            });
+
+      //      for (var i = 0; i <50; i++) {
+      //          scores.push({ x: randomDate(new Date(2012, 0, 1), i*86400000), y: Math.random() * (5 - 1) + 1 });
+      //      }
+
+            //for (var i = 0; i < answerList.Answers.length; i++) {
+            for (var i = 0; i < 50; i++) {
+                //var answer = answerList.Answers[i];
+                //var dateValue = answerList[i].Answers.y;
+                //var formattedDate = new Date(parseInt(dateValue.replace("/Date(", "").replace(")/", ""), 10));
+                //var score = answerlist.Answers[i].[x];
+                scores.push({ x: 2, y: new Date(2012, 0, 1) });
+            }
+
+            return [
+                {
+                    area: true,
+                    values: scores,
+                    key: "Question 1 scores",
+                    color: "#ff7f0e",
+                    strokeWidth: 5
+                }
+            ];
+        }*/
+
+
+
+</script>
+    }

@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@model JournalSystemMVC.Models.ResidentData.JournalEntry
+
+@using (Html.BeginForm("AddEntry", "Journals"))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.JournalId);
+
+        <div class="form-group">
+            <div class="col-md-12">
+                @Html.TextAreaFor(model => model.EntryText, new {htmlAttributes = new {@class = "input-wide"}})
+                @Html.ValidationMessageFor(model => model.EntryText, "", new {@class = "text-danger"})
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Submit entry" class="btn btn-default" />
+            </div>
+        </div>
+    }

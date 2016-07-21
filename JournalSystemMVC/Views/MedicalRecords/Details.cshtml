@@ -1,0 +1,163 @@
+﻿@model JournalSystemMVC.Models.Medicine.MedicalRecord
+
+@{
+    ViewBag.Title = "Details";
+}
+<div>
+    <h4>Medical Record</h4>
+    <hr/>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Weight)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Weight)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Height)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Height)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WaistLine)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WaistLine)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Created)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Created)
+        </dd>
+
+    </dl>
+</div>
+
+Prescriptions:
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Prescriptions.FirstOrDefault().PreparationName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Prescriptions.FirstOrDefault().AdministrationReason)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Prescriptions.FirstOrDefault().Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Prescriptions.FirstOrDefault().DispenserType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Prescriptions.FirstOrDefault().Dosage)
+        </th>
+    </tr>
+    @foreach (var item in Model.Prescriptions)
+    {
+
+        <tr>
+            <td>
+                @item.PreparationName
+            </td>
+            <td>
+                @item.AdministrationReason
+            </td>
+            <td>
+                @item.Description
+            </td>
+            <td>
+                @item.DispenserType
+            </td>
+            <td>
+                @item.Dosage
+            </td>
+        </tr>
+
+    }
+</table>
+
+Pro re nata medicine:
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PrnMedicines.FirstOrDefault().PreparationName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PrnMedicines.FirstOrDefault().AdministrationReason)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PrnMedicines.FirstOrDefault().Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PrnMedicines.FirstOrDefault().DispenserType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PrnMedicines.FirstOrDefault().Dosage)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PrnMedicines.FirstOrDefault().MaxTimesPerDay)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PrnMedicines.FirstOrDefault().SideEffects)
+        </th>
+    </tr>
+    @foreach (var item in Model.PrnMedicines)
+    {
+
+        <tr>
+            <td>
+                @item.PreparationName
+            </td>
+            <td>
+                @item.AdministrationReason
+            </td>
+            <td>
+                @item.Description
+            </td>
+            <td>
+                @item.DispenserType
+            </td>
+            <td>
+                @item.Dosage
+            </td>
+            <td>
+                @item.MaxTimesPerDay
+            </td>
+            <td>
+                @item.SideEffects
+            </td>
+        </tr>
+
+    }
+</table>
+
+Prescribing doctor:<hr/>
+
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(model => model.AdministeringDoctor.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.AdministeringDoctor.Name)</dd>
+    <dt>@Html.DisplayNameFor(model => model.AdministeringDoctor.ContactInformation.Email)</dt>
+    <dd>@Html.DisplayFor(model => model.AdministeringDoctor.ContactInformation.Email)</dd>
+    <dt>@Html.DisplayNameFor(model => model.AdministeringDoctor.ContactInformation.PhoneNumber)</dt>
+    <dd>@Html.DisplayFor(model => model.AdministeringDoctor.ContactInformation.PhoneNumber)</dd>
+    <dt>@Html.DisplayNameFor(model => model.AdministeringDoctor.Address.Street)</dt>
+    <dd>@Html.DisplayFor(model => model.AdministeringDoctor.Address.Street)</dd>
+    <dt>@Html.DisplayNameFor(model => model.AdministeringDoctor.Address.City)</dt>
+    <dd>@Html.DisplayFor(model => model.AdministeringDoctor.Address.City)</dd>
+    <dt>@Html.DisplayNameFor(model => model.AdministeringDoctor.Address.PostalCode)</dt>
+    <dd>@Html.DisplayFor(model => model.AdministeringDoctor.Address.PostalCode)</dd>
+</dl>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.MedicalRecordId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,31 @@
+﻿@model IEnumerable<JournalSystemMVC.Models.Statistics.QuestionForm>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create new question form.", "CreateQuestionForm")
+</p>
+<table class="table table-hover">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td title="@Html.DisplayFor(modelItem => item.Description)">
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.ActionLink("Fill out this form", "FillQuestionForm", new { id=item.QuestionnaireId })
+        </td>
+    </tr>
+}
+
+</table>

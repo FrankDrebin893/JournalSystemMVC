@@ -1,0 +1,14 @@
+﻿@model JournalSystemMVC.Models.Statistics.Answer
+
+<div>
+    @Html.HiddenFor(a => a.QuestionId)
+    @Html.HiddenFor(a => a.Question)
+
+    <div class="form-group">
+        @Model.Question.QuestionText
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.Score, new SelectList(new [] {1,2,3,4,5}))
+            @Html.ValidationMessageFor(model => model.Score, "", new {@class = "text-danger"})
+        </div>
+    </div>
+</div>

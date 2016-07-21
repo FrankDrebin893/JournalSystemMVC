@@ -1,0 +1,32 @@
+﻿@using JournalSystemMVC.Models.People
+@using JournalSystemMVC.Models.Statistics
+@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@model JournalSystemMVC.Models.ViewModels.AnswerViewModel
+@{
+    ViewBag.Title = "FillQuestionForm";
+    var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+    var currentUser = manager.FindById(User.Identity.GetUserId());
+    Model.EmployeeId = currentUser.EmployeeId;
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(a => a.EmployeeId)
+
+    @Html.LabelFor(a => a.ResidentId)
+    @Html.EditorFor(a => a.ResidentId)
+
+    <div>
+        @Html.EditorFor(model => model.Answers)
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+}
+
+

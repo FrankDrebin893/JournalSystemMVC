@@ -1,0 +1,15 @@
+﻿@model JournalSystemMVC.Models.ViewModels.HomeIndexViewModel
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@*<dl class="dl-horizontal">*@
+    @Html.React("JournalEntriesList", new
+{
+    entries = Model.JournalEntries,
+    page = Model.PageNum
+})
+
+@Html.ReactInitJavaScript()
+<div></div>

@@ -1,0 +1,48 @@
+﻿@using JournalSystemMVC.Models.ResidentData
+@model JournalSystemMVC.Models.ViewModels.JournalViewModel
+
+@{
+    ViewBag.Title = "Journal details";
+}
+
+@if (Request.IsAuthenticated)
+{
+<div>
+    <h4>@Model.ResidentName's journal</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        @Html.DisplayFor(model => model.Journal.ProfileDescription)
+    </dl>
+
+    <p>
+        New entry:
+    </p>
+
+    <div style="margin-bottom: 50px;">
+        @Html.Partial("Forms/_JournalEntryForm", new JournalEntry
+        {
+            JournalId = Model.Journal.JournalId
+        })
+    </div>
+
+    <div style="margin-top: 300px;">
+        @Html.React("JournalEntriesList", new
+        {
+            entries = Model.JournalEntries
+        })
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Journal.JournalId }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+
+</div>
+@Html.ReactInitJavaScript()
+
+@section scripts {
+    <script src="@Url.Content("~/Scripts/ReactScripts/AddEntry.jsx")"></script>
+}
+}
+else{
+@Html.Partial("_LoginRequest")
+}

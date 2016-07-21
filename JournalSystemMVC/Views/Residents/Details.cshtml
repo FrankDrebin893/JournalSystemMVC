@@ -1,0 +1,128 @@
+﻿@using JournalSystemMVC.Models.People
+@model JournalSystemMVC.Models.People.Resident
+
+@{
+    ViewBag.Title = "Details";
+
+    object src = null;
+    if(Model.Avatar != null)
+    {
+        src = "data:image/jpg;base64," + Convert.ToBase64String(Model.Avatar);
+    }
+    else if (Model.Avatar == null)
+    {
+        string root = HttpRuntime.AppDomainAppPath;
+        src = root + "\\Images\\anonymous.png";
+    }
+
+}
+
+@Html.ActionLink("Go to journal.", "Details", "Journals", new { id = Model.JournalId }, null) |
+@Html.ActionLink("Edit profile information", "Edit", new { id = Model.ResidentId }) |
+@Html.ActionLink("Back", "Index")
+
+<h2>@Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)</h2>
+
+<div>
+    <h4>Resident</h4>
+    <img id="img" src="@src" runat="server" alt="@Model.FirstName's profile picture" style="max-height: 250px; max-width: 250px"/>
+    <br/>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CivilStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CivilStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OfAge)
+        </dt>
+
+        <dd>
+            @Html.Raw((Model.OfAge) ? "Yes" : "No")
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PayingMunicipality)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PayingMunicipality)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ActingMunicipality)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ActingMunicipality)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BirthPlace)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BirthPlace)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MovedIn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MovedIn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SocialSecurityNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SocialSecurityNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateOfBirth)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Registered)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Registered)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Gender)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Gender)
+        </dd>
+
+    </dl>
+
+    @Html.Partial("_AddressPartialView", Model.Address)
+    @Html.Partial("_ContactInformationPartial", Model.ContactInformation)
+
+    <div>
+        Resident data here
+    </div>
+</div>
+
+@Html.React("JournalEntriesList", new
+{
+    entries = Model.Journal.JournalEntries,
+    id = Model.ResidentId,
+    page = 1
+})
+
+@Html.ReactInitJavaScript()

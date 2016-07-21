@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "DisplayQuestionFormData";
+}
+
+<style>
+    text {
+        font: 12px sans-serif;
+    }
+
+    svg {
+        display: block;
+    }
+
+     #chart1, #chart2, svg {
+        height: 250px;
+        width: 100%;
+    }
+</style>
+
+<h2>DisplayQuestionFormData</h2>
+<div id="chartOptions">
+    @Html.DropDownList("QuestionFormId", null, htmlAttributes: new { @class = "form-control"})
+    @Html.DropDownList("ResidentId", null, htmlAttributes: new { @class = "form-control" })
+    <button type="button" id="updateBtn" onclick="updateCharts();">Update chart selection</button>
+</div>
+
+<div id="chart2">
+
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        //createQuestionGraph();
+        createQuestionLineChart(1, 2);
+        createQuestionLineChart(2, 2);
+        createQuestionLineChart(3, 2);
+    </script>
+    <script type="text/javascript">
+        function updateCharts() {
+            
+            var questionFormId = $('#QuestionFormId').val();
+            var residentId = $('#ResidentId').val();
+
+            console.log("It works " + questionFormId + " " + residentId);
+
+            $.ajax({
+                url: '@Url.Action("GetQuestionList", "Statistics")',
+                data: { questionFormId },
+                success: function (data) {
+                    document.getElementById("chart2").innerHTML = "";
+                    var questionIds = JSON.parse(data);
+
+                    var i, questionId;
+                    for (i = 0; i < questionIds.QuestionIds.length; i++) {
+                        questionId = questionIds.QuestionIds[i];
+                        createQuestionLineChart(questionId, residentId);
+                    }
+                }
+            });
+
+        }
+    </script>
+}

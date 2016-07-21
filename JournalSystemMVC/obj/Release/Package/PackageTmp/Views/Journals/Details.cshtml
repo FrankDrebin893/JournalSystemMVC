@@ -1,0 +1,37 @@
+﻿@model JournalSystemMVC.Models.ResidentData.Journal
+
+@{
+    ViewBag.Title = "Journal details";
+}
+
+<div>
+    <h4>Journal</h4>
+    <hr/>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ProfileDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProfileDescription)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Add new entry to this journal.", "CreateEntry", new {id = Model.JournalId})
+</p>
+
+@Html.Partial("_JournalEntriesPartial", Model.JournalEntries)
+
+@Html.React("JournalEntriesList", new
+{
+    entries = Model.JournalEntries
+});
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.JournalId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+@Html.ReactInitJavaScript();

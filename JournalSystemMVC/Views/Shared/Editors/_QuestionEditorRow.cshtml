@@ -1,0 +1,13 @@
+﻿@model JournalSystemMVC.Models.Statistics.Question
+
+@using (Html.BeginCollectionItem("questions"))
+{
+    <div class="editorRow">
+        @Html.LabelFor(model => model.QuestionText, htmlAttributes: new {@class = "control-label col-md-2"})
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.QuestionText, new {htmlAttributes = new {@class = "form-control"}})
+            @Html.ValidationMessageFor(model => model.QuestionText, "", new {@class = "text-danger"})
+            <a href="#" class="deleteRow" id="deleteRow">Remove</a>
+        </div>
+    </div>
+}
